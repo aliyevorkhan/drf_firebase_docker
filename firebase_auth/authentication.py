@@ -30,25 +30,11 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
             decoded_token = auth.verify_id_token(id_token)
         except Exception:
             raise InvalidAuthToken("Invalid auth token")
-            pass
 
         if not id_token or not decoded_token:
             return None
 
-        try:
-            uid = decoded_token.get("uid")
-        except Exception:
-            raise FirebaseError()
-
-        try:
-            user= User.objects.get(username=uid)
-            user.last_login = timezone.localtime()
-            return (user, None)
-
-        except Exception:
-            print("User not found")
-            print("User has no profile")
-            return None
+        return decoded_token
 
     def sign_in_with_email_and_password(self,email, password, return_secure_token=True):
         payload = json.dumps({"email":email, "password":password, "return_secure_token":return_secure_token})
@@ -59,7 +45,10 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
                     params={"key": FIREBASE_WEB_API_KEY},
                     data=payload)
 
-        return r.json()
+        if r.status_code == 200:
+            return {"access_token": r.json()['idToken']}
+        else:
+            return r.json()
 
     def sign_up_with_email_and_password(self,email, password, return_secure_token=True):
         payload = json.dumps({"email":email, "password":password, "return_secure_token":return_secure_token})
@@ -70,4 +59,7 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
                     params={"key": FIREBASE_WEB_API_KEY},
                     data=payload)
 
-        return r.json()
+        if r.status_code == 200:
+            return {"access_token": r.json()['idToken']}
+        else:
+            return r.json()
