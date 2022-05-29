@@ -1,18 +1,38 @@
 from rest_framework.response import Response 
 from rest_framework.decorators import api_view
 from base.models import Item
-from .serializers import ItemSerializer
+from .serializers import ItemSerializer, UserSerializer
+from firebase_auth.authentication import FirebaseAuthentication
 
+fireb_auth = FirebaseAuthentication()
 
 @api_view(['GET'])
 def get_item(request):
-    items = Item.objects.all()
-    serializer = ItemSerializer(items, many=True)
-    return Response(serializer.data)
+    if fireb_auth.authenticate(request) is not None:
+        items = Item.objects.all()
+        serializer = ItemSerializer(items, many=True)
+        return Response(serializer.data)
+    else:
+        serializer = {'error': 'Unauthorized'}
+        return Response(serializer)
 
 @api_view(['POST'])
 def add_item(request):
-    serializer = ItemSerializer(data=request.data)
+    if fireb_auth.authenticate(request) is not None:
+        serializer = ItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    else:
+        serializer = {'error': 'Unauthorized'}
+        return Response(serializer)
+
+@api_view(['POST'])
+def sign_in(request):
+    serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.errors)
+        result = fireb_auth.sign_in_with_email_and_password(serializer.data['email'], serializer.data['password'])
+        return Response(result)
+    else:
+        serializer = {'error': 'No signed in user'}
+        return Response(serializer)
