@@ -125,12 +125,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'firebase_auth.authentication.FirebaseAuthentication',
-    ),
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework.authentication.SessionAuthentication',
+#         'firebase_auth.authentication.FirebaseAuthentication',
+#     ),
+# }
 
 FIREBASE_VARS = {
     'CREDENTIALS_PATH': BASE_DIR / 'firebase_credentials.json',
