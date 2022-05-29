@@ -1,6 +1,6 @@
 from rest_framework.response import Response 
 from rest_framework.decorators import api_view
-from base.models import Item
+from firebase_auth.models import Item
 from .serializers import ItemSerializer, UserSerializer
 from firebase_auth.authentication import FirebaseAuthentication
 
@@ -35,4 +35,14 @@ def sign_in(request):
         return Response(result)
     else:
         serializer = {'error': 'No signed in user'}
+        return Response(serializer)
+
+@api_view(['POST'])
+def sign_up(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        result = fireb_auth.sign_up_with_email_and_password(serializer.data['email'], serializer.data['password'])
+        return Response(result)
+    else:
+        serializer = {'error': 'Request body is not valid'}
         return Response(serializer)

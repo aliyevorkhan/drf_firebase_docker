@@ -1,5 +1,5 @@
 from rest_framework import serializers 
-from base.models import Item, User
+from firebase_auth.models import Item, User
 
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
