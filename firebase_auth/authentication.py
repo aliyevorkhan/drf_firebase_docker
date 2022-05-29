@@ -3,8 +3,8 @@ import json
 
 import firebase_admin
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.utils import timezone
+# from django.contrib.auth.models import User
+# from django.utils import timezone
 from firebase_admin import auth
 from firebase_admin import credentials
 from rest_framework import authentication

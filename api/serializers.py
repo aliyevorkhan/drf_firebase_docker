@@ -1,5 +1,5 @@
 from rest_framework import serializers 
-from firebase_auth.models import Item, User
+from firebase_auth.models import Item, UserPayload
 
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,5 +8,5 @@ class ItemSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = UserPayload
         fields = '__all__'

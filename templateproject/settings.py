@@ -131,6 +131,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #         'firebase_auth.authentication.FirebaseAuthentication',
 #     ),
 # }
+AUTH_USER_MODEL = 'firebase_auth.User'
 
 FIREBASE_VARS = {
     'CREDENTIALS_PATH': BASE_DIR / 'firebase_credentials.json',
