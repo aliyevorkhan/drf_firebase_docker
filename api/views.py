@@ -3,6 +3,8 @@ from rest_framework.decorators import api_view
 from firebase_auth.models import Item
 from .serializers import ItemSerializer, UserSerializer
 from firebase_auth.authentication import FirebaseAuthentication
+from django.contrib.auth.models import User
+from django.contrib.auth import login, authenticate
 
 fireb_auth = FirebaseAuthentication()
 
@@ -32,6 +34,11 @@ def sign_in(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         result = fireb_auth.sign_in_with_email_and_password(serializer.data['email'], serializer.data['password'])
+        if result.get('access_token', None) is not None:
+            username=serializer.data['email'].split('@')[0] # TODO set email as username
+            password=serializer.data['password']
+            user = authenticate(username=username, password=password)
+            login(request, user)
         return Response(result)
     else:
         serializer = {'error': 'No signed in user'}
@@ -42,6 +49,16 @@ def sign_up(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         result = fireb_auth.sign_up_with_email_and_password(serializer.data['email'], serializer.data['password'])
+        if result.get('access_token', None) is not None:
+            username=serializer.data['email'].split('@')[0] # TODO set email as username
+            email=serializer.data['email']
+            password=serializer.data['password']
+
+            user = User(username=username, email=email)
+            user.set_password(password)
+            user.save()
+            user = authenticate(username=username, password=password)
+            login(request, user)
         return Response(result)
     else:
         serializer = {'error': 'Request body is not valid'}
