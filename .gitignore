@@ -276,5 +276,3 @@ cython_debug/
 *.code-workspace
 
 *sqlite3
-
-*migrations*
