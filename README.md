@@ -1,5 +1,5 @@
 # drf_firebase_docker
-This repo aimed to integration with firebase and create API endpoint for Auth steps.
+Django Rest Framework Firebase Authentication Backend with Docker
 
 ---
 
@@ -9,7 +9,7 @@ Steps:
 
 - You should create project in your firebase via google console
 - Download project credentials as json file
-- Set **FIREBASE_WEB_API_KEY** as env variable 
+- Set **FIREBASE_WEB_API_KEY** as env variable (if you initialize project with Docker you don't need to set it)
 
 ---
 
@@ -40,13 +40,13 @@ Also there are two serailizers for these models.
   - route: *'/sign-up'*
   - method: **POST**
   - request body: *{"email": "your_email", "password": "your_pwd"}*
-  - returns: *credentials for requesting to server(idToken included)*
+  - returns: *{"access_token": "<your_access_token>"}*
   - auth token required: **False**
 - Sign In to server
   - route: *'/sign-in'*
   - method: **POST**
   - request body: *{"email": "your_email", "password": "your_pwd"}*
-  - returns: *credentials for requesting to server(idToken included)*
+  - returns: *{"access_token": "<your_access_token>"}*
   - auth token required: **False**
 
 *NOTE:* If your session is expired, you should sign in again.
@@ -71,10 +71,20 @@ API steps:
 - Get items:
   - Check user in database
   - Return all items in database
-
-Auth steps:
-- Token provided:
-  - Get Token from **HTTP_AUTHORIZATION** header
-  - Verify id token
+----
 
 ## Docker
+
+#### Initialize project with Docker
+
+##### You should configure all the steps below:
+- Configure your ***firebase_credentials.json*** file
+- Set your **FIREBASE_WEB_API_KEY** from **Dockerfile** as ENV var
+- Configure **ADMIN_EMAIL** and **ADMIN_PASSWORD** from *settings.py*
+- Build an image *(check from docker-commands.txt)*
+- Run container *(check from docker-commands.txt)*
+
+It will be started automatically when you satisfy last step.
+If your project started successfully, you can see it in your browser from *http://localhost:8000/*
+
+ATTENTION: You should configure your firebase_credentials.json file in your project root directory. Initially it creates admin user in localhost. You have to sign in with that admin user to firebase project console
