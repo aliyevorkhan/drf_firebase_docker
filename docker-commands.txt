@@ -1,0 +1,2 @@
+docker build --tag drf-firebase .
+docker run --publish 8000:8000 drf-firebase
