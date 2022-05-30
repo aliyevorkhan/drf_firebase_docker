@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMIN_EMAIL = 'admin@mail.com'
+ADMIN_PASSWORD = 'admin'
 
 # Application definition
 
