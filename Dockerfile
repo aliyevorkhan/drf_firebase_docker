@@ -6,6 +6,9 @@ COPY requirements.txt requirements.txt
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
 
+ENV FIREBASE_WEB_API_KEY="<your-web-api-key>"
+
 COPY . .
 
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"] 
+RUN ["chmod", "+x", "runserver.sh"]
+CMD ["./runserver.sh"]
